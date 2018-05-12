@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragments :: head(${anime.animeName})"></head>
+<body>
+  <h1 th:text="${anime.animeName}"></h1>
+  <p th:text="|导演: ${anime.director}|"></p>
+  <p th:text="|概要: ${anime.synopsis}|"></p>
+
+  <table>
+    <thead>
+    <tr><th>用户</th>
+      <th>评论</th>
+    </tr></thead>
+    <tbody><tr th:each="comment: ${comments}">
+      <td><p th:text="${comment.username}"></p></td>
+      <td><p th:text="${comment.commentContent}"></p></td>
+    </tr></tbody>
+  </table>
+</body>
+</html>

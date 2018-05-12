@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragments :: head('Login')"></head>
+<body>
+
+<form th:action="@{/login}" method="post">
+  <label>账号:</label>
+  <input type="text" name="username"/>
+  <label>密码:</label>
+  <input type="text" name="password"/>
+  <input type="submit" name="登陆"/>
+</form>
+
+<p th:unless="${#strings.isEmpty(errorMessage)}" th:text="${errorMessage}"></p>
+</body>
+</html>
