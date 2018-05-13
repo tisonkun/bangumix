@@ -19,6 +19,16 @@ class AnimeService @Autowired constructor(
     }
 
     fun insertOne(anime: Anime) {
-        jdbcTemplate.update("insert into bangumix_anime (anime_name, director_name, synopsis) values (?, ?, ?)", anime.animeName, anime.directorName, anime.synopsis)
+        if (validateAnime(anime)) {
+            jdbcTemplate.update("insert into bangumix_anime (anime_name, director_name, synopsis) values (?, ?, ?)", anime.animeName, anime.directorName, anime.synopsis)
+        } else {
+            throw IllegalArgumentException("动画信息格式有误，各项不可为空！")
+        }
+    }
+
+    private fun validateAnime(anime: Anime): Boolean {
+        return (anime.animeName.trim() != "")
+                && (anime.directorName.trim() != "")
+                && (anime.synopsis.trim() != "")
     }
 }

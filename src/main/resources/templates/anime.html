@@ -3,7 +3,7 @@
 <head th:replace="_fragments :: head(${anime.animeName})"></head>
 <body>
   <h1 th:text="${anime.animeName}"></h1>
-  <p th:text="|导演: ${anime.director}|"></p>
+  <p th:text="|导演: ${anime.directorName}|"></p>
   <p th:text="|概要: ${anime.synopsis}|"></p>
 
   <table>
@@ -16,5 +16,12 @@
       <td><p th:text="${comment.commentContent}"></p></td>
     </tr></tbody>
   </table>
+  <form th:if="${user != null}" th:action="@{/add/comment}" method="post">
+    <label>评论:</label>
+    <textarea name="commentContent"></textarea>
+    <input type="hidden" name="animeName" th:value="${anime.animeName}"/>
+    <input type="submit" name="提交"/>
+  </form>
+  <p th:unless="${#strings.isEmpty(errorMessage)}" th:text="${errorMessage}"></p>
 </body>
 </html>

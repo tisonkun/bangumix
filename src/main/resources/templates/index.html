@@ -10,7 +10,7 @@
     <th>概要</th>
   </tr></thead>
   <tbody><tr th:each="anime: ${animes}">
-    <td><a th:href="@{/anime(name=${anime.animeName})}" th:text="${anime.animeName}"></a></td>
+    <td><a th:href="@{/anime(animeName=${anime.animeName})}" th:text="${anime.animeName}"></a></td>
     <td><p th:text="${anime.directorName}"></p></td>
     <td><p th:text="${anime.synopsis}"></p></td>
   </tr></tbody>
@@ -28,6 +28,10 @@
   <input type="text" name="synopsis"/>
   <input type="submit" name="提交"/>
 </form>
+
+<script th:unless="${#strings.isEmpty(errorMessage)}" th:inline="javascript">
+  alert(/*[[${errorMessage}]]*/);
+</script>
 
 </body>
 </html>
