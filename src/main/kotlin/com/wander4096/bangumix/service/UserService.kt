@@ -18,4 +18,12 @@ class UserService @Autowired constructor(
         val maybeUser = jdbcTemplate.query("select * from bangumix_user where username = ? and password = ?", arrayOf(username, password), User())
         return maybeUser.firstOrNull()
     }
+
+    fun registerUser(user: User) {
+        if (null != checkUsername(user.username)) {
+            throw IllegalArgumentException("用户已存在")
+        } else {
+            jdbcTemplate.update("insert bangumix_user (username, password) values (?, ?)", user.username, user.password)
+        }
+    }
 }

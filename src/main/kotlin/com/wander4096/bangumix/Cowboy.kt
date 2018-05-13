@@ -2,32 +2,28 @@ package com.wander4096.bangumix
 
 import com.wander4096.bangumix.data.Anime
 import com.wander4096.bangumix.data.AnimeComment
-import com.wander4096.bangumix.service.AnimeRankService
+import com.wander4096.bangumix.data.User
 import com.wander4096.bangumix.service.AnimeService
 import com.wander4096.bangumix.service.UserService
 import com.wander4096.bangumix.service.CommentService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
-import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
 @Controller
 class Cowboy @Autowired constructor(
         private val userService: UserService,
         private val animeService: AnimeService,
-        private val animeRankService: AnimeRankService,
-        private val commentService: CommentService,
-        private val jdbcTemplate: JdbcTemplate
+        private val commentService: CommentService
 ){
     @GetMapping("/")
     fun index(session: HttpSession, model: Model): String {
-        model.addAttribute("animes", animeService.findAll())
+        model.addAttribute("animes", animeService.findAllWithRank())
         model.addAttribute("user", session.getAttribute("user"))
         return "index"
     }
@@ -72,6 +68,30 @@ class Cowboy @Autowired constructor(
         return "redirect:/"
     }
 
+    @GetMapping("/register")
+    fun register(): String {
+        return "register"
+    }
+
+    @PostMapping("/register")
+    fun register(@RequestParam username: String,
+                 @RequestParam password: String,
+                 @RequestParam repeatPassword: String,
+                 redirect: RedirectAttributes): String {
+        if (password != repeatPassword) {
+            redirect.addFlashAttribute("errorMessage", "两次输入的密码不一致！")
+            return "redirect:/register"
+        } else {
+            try {
+                userService.registerUser(User(username, password))
+            } catch (e: IllegalArgumentException) {
+                redirect.addFlashAttribute("errorMessage", e.message)
+                return "redirect:/register"
+            }
+        }
+        return "redirect:/"
+    }
+
     @PostMapping("/add/anime")
     fun addAnime(@RequestParam animeName: String,
                  @RequestParam directorName: String,
@@ -90,12 +110,12 @@ class Cowboy @Autowired constructor(
                    @RequestParam commentContent: String,
                    session: HttpSession,
                    redirect: RedirectAttributes): String {
+        redirect.addAttribute("animeName", animeName)
         try {
             commentService.insertOne(AnimeComment(0, animeName, session.getAttribute("user") as String, commentContent))
         } catch (e: IllegalArgumentException) {
             redirect.addFlashAttribute("errorMessage", e.message)
         }
-        redirect.addAttribute("animeName", animeName)
         return "redirect:/anime"
     }
 }
