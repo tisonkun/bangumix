@@ -1,7 +1,8 @@
 package com.wander4096.bangumix.service
 
 import com.wander4096.bangumix.data.Anime
-import com.wander4096.bangumix.data.AnimeWithRank
+import com.wander4096.bangumix.data.AnimeFullInfo
+import com.wander4096.bangumix.data.AnimeTag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
@@ -27,8 +28,8 @@ class AnimeService @Autowired constructor(
         }
     }
 
-    fun findAllWithRank(): List<AnimeWithRank> {
-        return jdbcTemplate.query("select a.anime_name, director_name, synopsis, rank from bangumix_anime as a left join bangumix_anime_rank as b on a.anime_name = b.anime_name;", AnimeWithRank())
+    fun findAllFullInformation(): List<AnimeFullInfo> {
+        return jdbcTemplate.query("select * from bangumix_anime_full_info", AnimeFullInfo())
     }
 
     private fun validateAnime(anime: Anime): Boolean {

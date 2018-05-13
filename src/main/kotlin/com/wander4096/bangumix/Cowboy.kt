@@ -2,6 +2,7 @@ package com.wander4096.bangumix
 
 import com.wander4096.bangumix.data.Anime
 import com.wander4096.bangumix.data.AnimeComment
+import com.wander4096.bangumix.data.AnimeFullInfo
 import com.wander4096.bangumix.data.User
 import com.wander4096.bangumix.service.AnimeService
 import com.wander4096.bangumix.service.UserService
@@ -23,7 +24,7 @@ class Cowboy @Autowired constructor(
 ){
     @GetMapping("/")
     fun index(session: HttpSession, model: Model): String {
-        model.addAttribute("animes", animeService.findAllWithRank())
+        model.addAttribute("animes", animeService.findAllFullInformation())
         model.addAttribute("user", session.getAttribute("user"))
         return "index"
     }

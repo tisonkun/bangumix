@@ -9,12 +9,14 @@
     <th>导演</th>
     <th>概要</th>
     <th>分数</th>
+    <th>标签</th>
   </tr></thead>
   <tbody><tr th:each="anime: ${animes}">
     <td><a th:href="@{/anime(animeName=${anime.animeName})}" th:text="${anime.animeName}"></a></td>
     <td><p th:text="${anime.directorName}"></p></td>
     <td><p th:text="${anime.synopsis}"></p></td>
     <td><p th:text="${anime.rank}"></p></td>
+    <td><div th:each="tag: ${anime.tags}"><p th:text="${tag}"></p></div></td>
   </tr></tbody>
 </table>
 
