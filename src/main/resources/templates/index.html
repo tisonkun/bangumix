@@ -209,9 +209,12 @@
     </div>
   </div>
 
-  <div class="ui vertical stripe segment">
+
+
+
+  <div class="ui vertical stripe segment" th:if="${user != null}">
     <div class="ui text container">
-      <form class="ui form" th:if="${user != null}" th:action="@{/add/anime}" method="post">
+      <form class="ui form" th:action="@{/add/anime}" method="post">
         <div class="field">
           <label>动画名:</label>
           <input type="text" name="animeName"/>
