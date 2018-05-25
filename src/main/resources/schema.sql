@@ -74,28 +74,26 @@ delimiter //
     )
     begin
         select anime_name
-        from bangumix_anime;
+        from (select s.anime_name, min(s.tag) as prec
+              from (select anime_name, tag
+                    from (select distinct anime_name, 0 as tag
+                          from
+                            (bangumix_anime_tag as a)
+                            natural join
+                            (select distinct tag_content
+                            from bangumix_anime_tag as b
+                            where b.username = username) as x) as y
+
+                            union
+
+                            (select distinct anime_name, 1 as tag
+                             from bangumix_anime)) as s
+                    group by s.anime_name
+                    order by prec
+                    limit 10) as t;
+
     end; //
 delimiter ;
-
---
---
--- delimiter //
---   create procedure bangumix_anime_full_info(
---     in in_anime_name varchar(255),
---     out anime_name varchar (255),
---     out director_name varchar (255),
---     out synopsis text,
---     out rank numeric,
---     out tags text)
---     begin
---       set anime_name = in_anime_name;
---       select director_name from bangumix_anime where anime_name = in_anime_name into director_name;
---       select synopsis from bangumix_anime where anime_name = in_anime_name into synopsis;
---       select rank from bangumix_anime_rank where anime_name = in_anime_name into rank;
---       select group_concat(tag_content separator '/') as tags from bangumix_anime_tag_count where anime_name = in_anime_name into tags;
---     end; //
--- delimiter ;
 
 
 insert into bangumix_user (username, password) values ('Tison', '123456');
@@ -111,8 +109,4 @@ insert into bangumix_anime_tag (anime_name, username, tag_content) values ('Mega
 insert into bangumix_anime_tag (anime_name, username, tag_content) values ('Megalo Box', 'Real', '四月新番');
 insert into bangumix_anime_tag (anime_name, username, tag_content) values ('Megalo Box', 'Think', '四月新番');
 insert into bangumix_anime_tag (anime_name, username, tag_content) values ('Megalo Box', 'Tison', 'Good');
-insert into bangumix_anime_tag (anime_name, username, tag_content) values ('Megalo Box', 'Real', 'Good');
-
--- call bangumix_anime_full_info('Megalo Box', @anime_name, @director_name, @synopsis, @rank, @tags);
--- select @tags;
--- select * from bangumix_anime_full_info;
+insert into bangumix_anime_tag (anime_name, username, tag_content) values ('Unnatraul', '野木亚纪子', 'Good');

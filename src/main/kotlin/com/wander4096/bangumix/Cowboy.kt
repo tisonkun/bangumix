@@ -71,7 +71,7 @@ class Cowboy @Autowired constructor(
             if (userService.checkUsernameAndPassword(username, password) != null) {
                 session.setAttribute("user", username)
 //                redirect.addFlashAttribute("loginSuccess", true)
-                return "redirect:/login"
+                return "redirect:/"
             } else {
                 redirect.addFlashAttribute("errorMessage", "密码错误！")
                 return "redirect:/login"
