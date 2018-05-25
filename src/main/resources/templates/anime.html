@@ -25,7 +25,16 @@
                 $('.ui.dropdown')
                     .dropdown()
                 ;
+                $('#delete').click(function () {
+                    $(this).parent.remove();
+                })
             });
+        var removeTag = function (e, n) {
+            var tn = e.previousElementSibling.innerHTML;
+            var an = encodeURIComponent(document.getElementById("animename").innerText);
+            $.post("removeTag/", "animename=" + an + "&tagname=" + tn)
+            $(e).parent().remove();
+        }
     </script>
 </head>
 <body>
@@ -46,7 +55,7 @@
 
 
 <div class="ui main text container">
-    <h1 class="ui header" th:text="${anime.animeName}"></h1>
+    <h1 class="ui header" th:text="${anime.animeName}" id="animename"></h1>
     <p th:text="|导演: ${anime.directorName}|"></p>
     <p th:text="|概要: ${anime.synopsis}|"></p>
 
@@ -54,15 +63,17 @@
     <div class="ui red tag label" th:each="tag: ${anime.tags}"><p th:text="${tag}"></p></div>
 
     <h3 th:if="${user != null}" th:text="你的标签"></h3>
-    <div class="ui red tag label" th:each="tag: ${userTags}"><a th:text="${tag}"></a> <i class="delete icon"></i> </div>
+    <div class="ui red tag label" th:each="tag: ${userTags}"><a th:text="${tag}"></a> <i class="delete icon" onclick="removeTag(this)"></i> </div>
 
-    <div class="ui right labeled left icon input small">
+    <form class="ui right labeled left icon input small" action="addtag" method="post">
         <i class="tags icon"></i>
-        <input type="text" placeholder="Enter tags">
-        <a class="ui tag label">
+        <input type="text" name="animeTag" placeholder="Enter tags" required="required">
+
+        <input type="hidden" name="animeName" th:value="${anime.animeName}"/>
+        <button class="ui tag label" type="submit">
             添加标签
-        </a>
-    </div>
+        </button>
+    </form>
 
     <h3 th:if="${user != null}" th:text="系统评分"></h3>
     <div class="ui heart rating" th:data-rating="${rankAsInt}" data-max-rating="5" th:title="|分数: ${anime.rank}|"></div>
