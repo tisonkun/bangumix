@@ -1,3 +1,7 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
 drop view      if exists bangumix_anime_rank;
 drop view      if exists bangumix_anime_tag_count;
 drop view      if exists bangumix_anime_full_info;
@@ -9,39 +13,63 @@ drop table     if exists bangumix_anime_tag;
 
 
 create table bangumix_user(
-  username varchar (255),
-  password varchar (255),
+  username varchar (255) not null,
+  password varchar (255) not null,
   primary key (username)
 );
 
 create table bangumix_anime(
-  anime_name varchar (255),
-  director_name varchar (255),
-  synopsis text,
+  anime_name varchar (255) not null,
+  director_name varchar (255) not null,
+  synopsis text not null,
   primary key (anime_name)
 );
 
 create table bangumix_anime_comment(
   comment_id int AUTO_INCREMENT,
-  anime_name varchar (255),
-  username varchar (255),
-  comment_content text,
+  anime_name varchar (255) not null,
+  username varchar (255) not null,
+  comment_content text not null,
   comment_timestamp timestamp not null,
-  primary key (comment_id)
+  primary key (comment_id),
+  FOREIGN KEY (username)
+  REFERENCES bangumix_user(username)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  FOREIGN KEY (anime_name)
+  REFERENCES bangumix_anime(anime_name)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 create table bangumix_anime_point(
-  anime_name varchar (255),
-  username varchar (255),
-  point int,
-  primary key (anime_name, username)
+  anime_name varchar (255) not null,
+  username varchar (255) not null,
+  point int not null,
+  primary key (anime_name, username),
+    FOREIGN KEY (username)
+    REFERENCES bangumix_user(username)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    FOREIGN KEY (anime_name)
+    REFERENCES bangumix_anime(anime_name)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 create table bangumix_anime_tag(
-  anime_name varchar (255),
-  username varchar (255),
-  tag_content varchar (255),
-  primary key (anime_name, username, tag_content)
+  anime_name varchar (255) not null,
+  username varchar (255) not null,
+  tag_content varchar (255) not null,
+  primary key (anime_name, username, tag_content),
+    FOREIGN KEY (username)
+    REFERENCES bangumix_user(username)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    FOREIGN KEY (anime_name)
+    REFERENCES bangumix_anime(anime_name)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 create view bangumix_anime_rank as
