@@ -32,6 +32,11 @@ class AnimeService @Autowired constructor(
         return jdbcTemplate.query("select * from bangumix_anime_full_info", AnimeFullInfo())
     }
 
+    fun findOneFullInformation(animeName: String): AnimeFullInfo? {
+        val result = jdbcTemplate.query("select * from bangumix_anime_full_info where anime_name=?", arrayOf(animeName), AnimeFullInfo())
+        return result.firstOrNull()
+    }
+
     private fun validateAnime(anime: Anime): Boolean {
         return (anime.animeName.trim() != "")
                 && (anime.directorName.trim() != "")

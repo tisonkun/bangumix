@@ -21,7 +21,8 @@ class Cowboy @Autowired constructor(
         private val animeService: AnimeService,
         private val commentService: CommentService,
         private val rankService: RankService,
-        private val recommendService: RecommendService
+        private val recommendService: RecommendService,
+        private val tagService: TagService
 ){
     @GetMapping("/")
     fun index(session: HttpSession, model: Model): String {
@@ -39,7 +40,7 @@ class Cowboy @Autowired constructor(
     fun anime(@RequestParam("animeName") animeName: String,
               session: HttpSession,
               model: Model): String {
-        animeService.findByName(animeName)?.let { anime ->
+        animeService.findOneFullInformation(animeName)?.let { anime ->
             model.addAttribute("anime", anime)
             model.addAttribute("comments", commentService.findAllByAnime(animeName))
             val user = session.getAttribute("user")
@@ -51,7 +52,8 @@ class Cowboy @Autowired constructor(
                 } else {
                     model.addAttribute("point", "尚未评分")
                 }
-
+                val userTags = tagService.findByAnimeAndUser(animeName, username).map { it.tagContent }
+                model.addAttribute("userTags", userTags)
             }
             return "anime"
         } ?: return "error/404"

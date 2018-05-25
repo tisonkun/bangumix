@@ -26,12 +26,12 @@ class RankService @Autowired constructor(
     fun validatePoint(pointAsString: String): Int {
         try {
             val point = pointAsString.toInt()
-            if (point !in 1..10) {
-                throw IllegalArgumentException("评分分数必须是 1 到 10 的整数")
+            if (point !in 1..5) {
+                throw IllegalArgumentException("评分分数必须是 1 到 5 的整数")
             }
             return point
         } catch (e: NumberFormatException) {
-            throw IllegalArgumentException("评分分数必须是 1 到 10 的整数")
+            throw IllegalArgumentException("评分分数必须是 1 到 5 的整数")
         }
     }
 

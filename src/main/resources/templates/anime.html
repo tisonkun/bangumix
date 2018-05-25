@@ -50,7 +50,8 @@
     <p th:text="|概要: ${anime.synopsis}|"></p>
     <div class="ui heart rating" data-rating="3" data-max-rating="5" title="分数：3.12"></div>
 
-    <p></p>
+    <div class="ui mini orange tag label" th:each="tag: ${anime.tags}"><p th:text="${tag}"></p></div>
+    <div class="ui mini orange tag label" th:each="tag: ${userTags}"><p th:text="${tag}"></p></div>
 
     <p th:if="${user != null}" th:text="|你的评分: ${point}|"></p>
     <form class="ui form" th:if="${user != null}" th:action="@{/add/point}" method="post">
