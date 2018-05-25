@@ -118,6 +118,8 @@ class Cowboy @Autowired constructor(
             commentService.insertOne(AnimeComment(0, animeName, session.getAttribute("user") as String, commentContent))
         } catch (e: IllegalArgumentException) {
             redirect.addFlashAttribute("errorMessage", e.message)
+        } catch (e: Exception) {
+            redirect.addFlashAttribute("errorMessage", "未知错误")
         }
         return "redirect:/anime"
     }
