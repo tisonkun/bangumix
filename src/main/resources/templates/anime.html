@@ -16,14 +16,15 @@
     .main.container {
       margin-top: 7em;
     }
-
-
   </style>
     <script>
         $(document)
             .ready(function(){
                 $('.ui.rating')
                     .rating('disable');
+                $('.ui.dropdown')
+                    .dropdown()
+                ;
             });
     </script>
 </head>
@@ -48,17 +49,45 @@
     <h1 class="ui header" th:text="${anime.animeName}"></h1>
     <p th:text="|导演: ${anime.directorName}|"></p>
     <p th:text="|概要: ${anime.synopsis}|"></p>
+
+    <h3 th:if="${user != null}" th:text="系统标签"></h3>
+    <div class="ui red tag label" th:each="tag: ${anime.tags}"><p th:text="${tag}"></p></div>
+
+    <h3 th:if="${user != null}" th:text="你的标签"></h3>
+    <div class="ui red tag label" th:each="tag: ${userTags}"><a th:text="${tag}"></a> <i class="delete icon"></i> </div>
+
+    <div class="ui right labeled left icon input small">
+        <i class="tags icon"></i>
+        <input type="text" placeholder="Enter tags">
+        <a class="ui tag label">
+            添加标签
+        </a>
+    </div>
+
+    <h3 th:if="${user != null}" th:text="系统评分"></h3>
     <div class="ui heart rating" th:data-rating="${rankAsInt}" data-max-rating="5" th:title="|分数: ${anime.rank}|"></div>
-
-    <div class="ui mini orange tag label" th:each="tag: ${anime.tags}"><p th:text="${tag}"></p></div>
-    <div class="ui mini orange tag label" th:each="tag: ${userTags}"><p th:text="${tag}"></p></div>
-
-    <p th:if="${user != null}" th:text="|你的评分: ${point}|"></p>
+    <h3 th:if="${user != null}" th:text="|你的评分: ${point}|"></h3>
     <form class="ui form" th:if="${user != null}" th:action="@{/add/point}" method="post">
         <input type="hidden" name="animeName" th:value="${anime.animeName}"/>
         <div class="ui action left icon input">
-            <input type="text" name="point"/>
-            <div class="ui teal button" type="submit">评分</div>
+            <!--
+            <input type="number" name="point" min="0" max="10"/>
+            -->
+            <div class="ui selection dropdown">
+                <input type="hidden" name="point">
+                <div class="default text">分数</div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item" data-value="1">1</div>
+                    <div class="item" data-value="2">2</div>
+                    <div class="item" data-value="3">3</div>
+                    <div class="item" data-value="4">4</div>
+                    <div class="item" data-value="5">5</div>
+                </div>
+            </div>
+
+
+            <button class="ui teal button" type="submit">修改评分</button>
         </div>
 
     </form>
