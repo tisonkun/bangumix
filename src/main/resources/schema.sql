@@ -59,11 +59,14 @@ create view bangumix_anime_tag_count as
 ;
 
 create view bangumix_anime_full_info as
-  select a.anime_name, a.director_name, a.synopsis, r.rank, group_concat(tag_content separator '/') as tags
-  from bangumix_anime as a, bangumix_anime_rank as r, bangumix_anime_tag_count as t
-  where a.anime_name = r.anime_name and a.anime_name = t.anime_name
-  group by a.anime_name, a.director_name, a.synopsis, r.rank
-  order by r.rank
+    select x.anime_name, x.director_name, x.synopsis, x.rank, group_concat(tag_content separator '/') as tags
+    from (
+    select a.anime_name, a.director_name, a.synopsis, b.rank
+    from (bangumix_anime as a
+          left join bangumix_anime_rank as b on a.anime_name = b.anime_name)) as x
+          left join bangumix_anime_tag_count as t on x.anime_name = t.anime_name
+    group by x.anime_name, x.director_name, x.synopsis, x.rank
+    order by x.rank desc
 ;
 
 

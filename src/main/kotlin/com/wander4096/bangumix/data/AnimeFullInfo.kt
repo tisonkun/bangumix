@@ -13,6 +13,6 @@ data class AnimeFullInfo(val animeName: String = "",
             r.getString("director_name"),
             r.getString("synopsis"),
             r.getDouble("rank"),
-            r.getString("tags").split("/").take(5)
+            r.getString("tags")?.split("/")?.take(5) ?: listOf()
     )
 }
