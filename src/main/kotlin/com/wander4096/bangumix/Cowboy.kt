@@ -42,6 +42,7 @@ class Cowboy @Autowired constructor(
               model: Model): String {
         animeService.findOneFullInformation(animeName)?.let { anime ->
             model.addAttribute("anime", anime)
+            model.addAttribute("rankAsInt", anime.rank.toInt())
             model.addAttribute("comments", commentService.findAllByAnime(animeName))
             val user = session.getAttribute("user")
             model.addAttribute("user", user)

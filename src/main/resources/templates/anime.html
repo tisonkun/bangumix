@@ -48,7 +48,7 @@
     <h1 class="ui header" th:text="${anime.animeName}"></h1>
     <p th:text="|导演: ${anime.directorName}|"></p>
     <p th:text="|概要: ${anime.synopsis}|"></p>
-    <div class="ui heart rating" data-rating="3" data-max-rating="5" title="分数：3.12"></div>
+    <div class="ui heart rating" th:data-rating="${rankAsInt}" data-max-rating="5" th:title="|分数: ${anime.rank}|"></div>
 
     <div class="ui mini orange tag label" th:each="tag: ${anime.tags}"><p th:text="${tag}"></p></div>
     <div class="ui mini orange tag label" th:each="tag: ${userTags}"><p th:text="${tag}"></p></div>
