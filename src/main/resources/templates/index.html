@@ -151,7 +151,7 @@
 <div class="ui vertical inverted sidebar menu">
   <a class="item" th:unless="${user != null}" th:href="@{/login}" th:text="登陆"></a>
   <a class="item" th:unless="${user != null}" th:href="@{/register}" th:text="注册"></a>
-  <a class="ui item" th:if="${user != null}" th:text="${user}"></a>
+  <a class="item" th:if="${user != null}" th:text="${user}"></a>
   <a class="item" th:if="${user != null}" th:href="@{/logout}" th:text="注销"></a>
 </div>
 
@@ -168,7 +168,7 @@
           <div class="header" th:text="${errorMessage}"></div>
         </div>
         <div class="right item">
-          <a class="ui inverted button" th:unless="${user != null}" th:href="@{/login}" th:text="登陆"></a>
+          <a class="ui inverted button" th:unless="${user != null}" th:href="@{/login}" th:text="登录"></a>
           <a class="ui inverted button" th:unless="${user != null}" th:href="@{/register}" th:text="注册"></a>
           <a class="ui item" th:if="${user != null}" th:text="${user}"></a>
           <a class="ui inverted button" th:if="${user != null}" th:href="@{/logout}" th:text="注销"></a>
@@ -186,14 +186,19 @@
 
   </div>
 
-  <div th:if="${user != null}">
-    为你推荐
-    <div th:each="animeName : ${recommendAnimes}">
-      <a th:href="@{/anime(animeName=${animeName})}" th:text="${animeName}"></a>
-    </div>
 
+  <div class="ui vertical stripe segment" th:if="${user != null}">
+      <div class="ui text container">
+          <h3 class="ui header">为你推荐</h3>
+          <div class="ui big horizontal divided list">
+
+              <div class="item" th:each="animeName : ${recommendAnimes}">
+                  <a th:href="@{/anime(animeName=${animeName})}" th:text="${animeName}"></a>
+              </div>
+
+          </div>
+      </div>
   </div>
-
 
 
   <div class="ui vertical stripe segment">
@@ -211,7 +216,7 @@
           <td><p th:text="${anime.directorName}"></p></td>
           <td><p th:text="${anime.synopsis}"></p></td>
           <td><p th:text="${anime.rank}"></p></td>
-          <td><div th:each="tag: ${anime.tags}"><p th:text="${tag}"></p></div></td>
+          <td><div class="ui mini orange tag label" th:each="tag: ${anime.tags}"><p th:text="${tag}"></p></div></td>
         </tr></tbody>
       </table>
     </div>
