@@ -186,6 +186,14 @@
 
   </div>
 
+  <div th:if="${user != null}">
+    为你推荐
+    <div th:each="animeName : ${recommendAnimes}">
+      <a th:href="@{/anime(animeName=${animeName})}" th:text="${animeName}"></a>
+    </div>
+
+  </div>
+
 
 
   <div class="ui vertical stripe segment">

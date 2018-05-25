@@ -4,10 +4,7 @@ import com.wander4096.bangumix.data.Anime
 import com.wander4096.bangumix.data.AnimeComment
 import com.wander4096.bangumix.data.AnimeFullInfo
 import com.wander4096.bangumix.data.User
-import com.wander4096.bangumix.service.AnimeService
-import com.wander4096.bangumix.service.UserService
-import com.wander4096.bangumix.service.CommentService
-import com.wander4096.bangumix.service.RankService
+import com.wander4096.bangumix.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
+import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
 @Controller
@@ -22,12 +20,18 @@ class Cowboy @Autowired constructor(
         private val userService: UserService,
         private val animeService: AnimeService,
         private val commentService: CommentService,
-        private val rankService: RankService
+        private val rankService: RankService,
+        private val recommendService: RecommendService
 ){
     @GetMapping("/")
     fun index(session: HttpSession, model: Model): String {
         model.addAttribute("animes", animeService.findAllFullInformation())
-        model.addAttribute("user", session.getAttribute("user"))
+        val username = session.getAttribute("user")
+        model.addAttribute("user", username)
+        username?.let {
+            val recommend = recommendService.recommendForUser(it as String)
+            model.addAttribute("recommendAnimes", recommend)
+        }
         return "index"
     }
 
@@ -41,8 +45,13 @@ class Cowboy @Autowired constructor(
             val user = session.getAttribute("user")
             model.addAttribute("user", user)
             user?.let { username ->
-                val point = rankService.findByAnimeAndUser(animeName, username as String)?.point ?: "尚未评分"
-                model.addAttribute("point", point)
+                val point = rankService.findByAnimeAndUser(animeName, username as String)
+                if (null != point) {
+                    model.addAttribute("point", point.point)
+                } else {
+                    model.addAttribute("point", "尚未评分")
+                }
+
             }
             return "anime"
         } ?: return "error/404"
@@ -61,7 +70,8 @@ class Cowboy @Autowired constructor(
         if (userService.checkUsername(username) != null) {
             if (userService.checkUsernameAndPassword(username, password) != null) {
                 session.setAttribute("user", username)
-                return "redirect:/"
+//                redirect.addFlashAttribute("loginSuccess", true)
+                return "redirect:/login"
             } else {
                 redirect.addFlashAttribute("errorMessage", "密码错误！")
                 return "redirect:/login"
