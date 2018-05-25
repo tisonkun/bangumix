@@ -33,10 +33,12 @@ class Cowboy @Autowired constructor(
     fun anime(@RequestParam("animeName") animeName: String,
               session: HttpSession,
               model: Model): String {
-        model.addAttribute("anime", animeService.findByName(animeName))
-        model.addAttribute("comments", commentService.findAllByAnime(animeName))
-        model.addAttribute("user", session.getAttribute("user"))
-        return "anime"
+        animeService.findByName(animeName)?.let {anime ->
+            model.addAttribute("anime", anime)
+            model.addAttribute("comments", commentService.findAllByAnime(animeName))
+            model.addAttribute("user", session.getAttribute("user"))
+            return "anime"
+        } ?: return "error/404"
     }
 
     @GetMapping("login")
