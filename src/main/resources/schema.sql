@@ -26,6 +26,7 @@ create table bangumix_anime_comment(
   anime_name varchar (255),
   username varchar (255),
   comment_content text,
+  comment_timestamp timestamp not null,
   primary key (comment_id)
 );
 
@@ -89,7 +90,7 @@ insert into bangumix_user (username, password) values ('Tison', '123456');
 insert into bangumix_user (username, password) values ('Real', '123456');
 insert into bangumix_user (username, password) values ('Think', '123456');
 insert into bangumix_anime (anime_name, director_name, synopsis) values ('Megalo Box', '森山洋', '一首复古的热血拳击赞歌');
-insert into bangumix_anime_comment (anime_name, username, comment_content) values ('Megalo Box', 'Tison', 'Good');
+insert into bangumix_anime_comment (anime_name, username, comment_content, comment_timestamp) values ('Megalo Box', 'Tison', 'Good', null);
 insert into bangumix_anime_point (anime_name, username, point) values ('Megalo Box', 'Tison', 10);
 insert into bangumix_anime_point (anime_name, username, point) values ('Megalo Box', 'Real', 5);
 insert into bangumix_anime_tag (anime_name, username, tag_content) values ('Megalo Box', 'Tison', '复古');

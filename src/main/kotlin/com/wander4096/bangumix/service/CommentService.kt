@@ -4,6 +4,7 @@ import com.wander4096.bangumix.data.AnimeComment
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
+import java.sql.Timestamp
 
 @Service
 class CommentService @Autowired constructor(
@@ -15,7 +16,7 @@ class CommentService @Autowired constructor(
 
     fun insertOne(animeComment: AnimeComment) {
         if (validateAnime(animeComment)) {
-            jdbcTemplate.update("insert into bangumix_anime_comment (anime_name, username, comment_content) values (?,?,?)", animeComment.animeName, animeComment.username, animeComment.commentContent)
+            jdbcTemplate.update("insert into bangumix_anime_comment (anime_name, username, comment_content, comment_timestamp) values (?,?,?,?)", animeComment.animeName, animeComment.username, animeComment.commentContent, Timestamp(System.currentTimeMillis()))
         } else {
             throw IllegalArgumentException("评论内容不可为空!")
         }

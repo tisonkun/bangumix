@@ -7,6 +7,7 @@ import com.wander4096.bangumix.data.User
 import com.wander4096.bangumix.service.AnimeService
 import com.wander4096.bangumix.service.UserService
 import com.wander4096.bangumix.service.CommentService
+import com.wander4096.bangumix.service.RankService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -20,7 +21,8 @@ import javax.servlet.http.HttpSession
 class Cowboy @Autowired constructor(
         private val userService: UserService,
         private val animeService: AnimeService,
-        private val commentService: CommentService
+        private val commentService: CommentService,
+        private val rankService: RankService
 ){
     @GetMapping("/")
     fun index(session: HttpSession, model: Model): String {
@@ -33,10 +35,15 @@ class Cowboy @Autowired constructor(
     fun anime(@RequestParam("animeName") animeName: String,
               session: HttpSession,
               model: Model): String {
-        animeService.findByName(animeName)?.let {anime ->
+        animeService.findByName(animeName)?.let { anime ->
             model.addAttribute("anime", anime)
             model.addAttribute("comments", commentService.findAllByAnime(animeName))
-            model.addAttribute("user", session.getAttribute("user"))
+            val user = session.getAttribute("user")
+            model.addAttribute("user", user)
+            user?.let { username ->
+                val point = rankService.findByAnimeAndUser(animeName, username as String)?.point ?: "尚未评分"
+                model.addAttribute("point", point)
+            }
             return "anime"
         } ?: return "error/404"
     }
@@ -116,6 +123,22 @@ class Cowboy @Autowired constructor(
         redirect.addAttribute("animeName", animeName)
         try {
             commentService.insertOne(AnimeComment(0, animeName, session.getAttribute("user") as String, commentContent))
+        } catch (e: IllegalArgumentException) {
+            redirect.addFlashAttribute("errorMessage", e.message)
+        } catch (e: Exception) {
+            redirect.addFlashAttribute("errorMessage", "未知错误")
+        }
+        return "redirect:/anime"
+    }
+
+    @PostMapping("/add/point")
+    fun addPoint(@RequestParam animeName: String,
+                 @RequestParam point: String,
+                 session: HttpSession,
+                 redirect: RedirectAttributes): String {
+        redirect.addAttribute("animeName", animeName)
+        try {
+            rankService.insertOne(animeName, session.getAttribute("user") as String, point)
         } catch (e: IllegalArgumentException) {
             redirect.addFlashAttribute("errorMessage", e.message)
         } catch (e: Exception) {

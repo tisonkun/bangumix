@@ -12,21 +12,30 @@
   <p th:text="|导演: ${anime.directorName}|"></p>
   <p th:text="|概要: ${anime.synopsis}|"></p>
 
+  <p th:if="${user != null}" th:text="|你的评分: ${point}|"></p>
+  <form th:if="${user != null}" th:action="@{/add/point}" method="post">
+      <input type="hidden" name="animeName" th:value="${anime.animeName}"/>
+      <input type="text" name="point"/>
+      <input type="submit" value="评分"/>
+  </form>
+
   <table>
     <thead>
     <tr><th>用户</th>
       <th>评论</th>
+        <th>评论时间</th>
     </tr></thead>
     <tbody><tr th:each="comment: ${comments}">
-      <td><p th:text="${comment.username}"></p></td>
-      <td><p th:text="${comment.commentContent}"></p></td>
+        <td><p th:text="${comment.username}"></p></td>
+        <td><p th:text="${comment.commentContent}"></p></td>
+        <td><p th:text="${comment.commentTimestamp}"></p></td>
     </tr></tbody>
   </table>
   <form th:if="${user != null}" th:action="@{/add/comment}" method="post">
     <label>评论:</label>
     <textarea name="commentContent"></textarea>
     <input type="hidden" name="animeName" th:value="${anime.animeName}"/>
-    <input type="submit" name="提交"/>
+    <input type="submit" value="提交"/>
   </form>
   <p th:unless="${#strings.isEmpty(errorMessage)}" th:text="${errorMessage}"></p>
 </body>
