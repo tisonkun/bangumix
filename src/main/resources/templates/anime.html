@@ -35,10 +35,24 @@
             $.post("remove/tag/", "animeName=" + an + "&animeTag=" + tn);
             $(e).parent().remove();
         }
+        $('.ui.modal')
+            .modal({
+                onApprove:function () {
+                    return true;
+                }
+            })
+            .modal('show')
+        ;
     </script>
 </head>
 <body>
 
+<div class="ui modal" th:unless="${#strings.isEmpty(errorMessage)}">
+    <div class="header" th:text="${errorMessage}"></div>
+    <div class="actions">
+        <div class="ui primary ok button">OK</div>
+    </div>
+</div>
 
 <div class="ui fixed inverted menu">
     <div class="ui container">
