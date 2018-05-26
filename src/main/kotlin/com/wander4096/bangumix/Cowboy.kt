@@ -128,6 +128,36 @@ class Cowboy @Autowired constructor(
         return "redirect:/"
     }
 
+    @PostMapping("/add/tag")
+    fun addTag(@RequestParam animeName: String,
+               @RequestParam animeTag: String,
+               redirect: RedirectAttributes,
+               session: HttpSession,
+               request: HttpServletRequest): String {
+        try {
+            tagService.insertOne(animeName, session.getAttribute("user") as String, animeTag)
+        } catch (e: IllegalArgumentException) {
+            redirect.addFlashAttribute("errorMessage", e.message)
+        }
+        return "redirect:" + request.getHeader("Referer")
+    }
+
+    @PostMapping("/remove/tag")
+    fun removeTag(@RequestParam animeName: String,
+                  @RequestParam animeTag: String,
+                  redirect: RedirectAttributes,
+                  session: HttpSession,
+                  request: HttpServletRequest): String {
+        try {
+            tagService.removeOne(animeName, session.getAttribute("user") as String, animeTag)
+        } catch (e: IllegalArgumentException) {
+            redirect.addFlashAttribute("errorMessage", e.message)
+        } catch (e: Exception) {
+            redirect.addFlashAttribute("errorMessage", "未知错误！")
+        }
+        return "redirect:" + request.getHeader("Referer")
+    }
+
     @PostMapping("/add/comment")
     fun addComment(@RequestParam animeName: String,
                    @RequestParam commentContent: String,

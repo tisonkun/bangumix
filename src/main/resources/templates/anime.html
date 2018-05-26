@@ -32,7 +32,8 @@
         var removeTag = function (e, n) {
             var tn = e.previousElementSibling.innerHTML;
             var an = encodeURIComponent(document.getElementById("animename").innerText);
-            $.post("removeTag/", "animename=" + an + "&tagname=" + tn)
+            $.post("remove/tag/", "animeName=" + an + "&animeTag=" + tn);
+            console.log(an, tn);
             $(e).parent().remove();
         }
     </script>
@@ -65,10 +66,9 @@
     <h3 th:if="${user != null}" th:text="你的标签"></h3>
     <div class="ui red tag label" th:each="tag: ${userTags}"><a th:text="${tag}"></a> <i class="delete icon" onclick="removeTag(this)"></i> </div>
 
-    <form class="ui right labeled left icon input small" action="addtag" method="post">
+    <form class="ui right labeled left icon input small" th:action="@{/add/tag}" method="post">
         <i class="tags icon"></i>
         <input type="text" name="animeTag" placeholder="Enter tags" required="required">
-
         <input type="hidden" name="animeName" th:value="${anime.animeName}"/>
         <button class="ui tag label" type="submit">
             添加标签

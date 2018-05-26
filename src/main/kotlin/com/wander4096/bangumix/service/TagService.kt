@@ -12,4 +12,20 @@ class TagService @Autowired constructor(
     fun findByAnimeAndUser(animeName: String, username: String): List<AnimeTag> {
         return jdbcTemplate.query("select * from bangumix_anime_tag where anime_name=? and username=?", arrayOf(animeName, username), AnimeTag())
     }
+
+    fun insertOne(animeName: String, username: String, tagContent: String) {
+        validate(animeName, username, tagContent)
+        jdbcTemplate.update("insert into bangumix_anime_tag (anime_name, username, tag_content) values (?,?,?)", animeName, username, tagContent)
+    }
+
+    fun removeOne(animeName: String, username: String, tagContent: String) {
+        jdbcTemplate.update("delete from bangumix_anime_tag where anime_name=? and username=? and tag_content=?", animeName, username, tagContent)
+    }
+
+    fun validate(animeName: String, username: String, tagContent: String) {
+        if ("" == (tagContent))
+            throw IllegalArgumentException("标签不可为空！")
+        if (tagContent in findByAnimeAndUser(animeName, username).map { it.tagContent })
+            throw IllegalArgumentException("你已经添加过这个标签啦！")
+    }
 }
