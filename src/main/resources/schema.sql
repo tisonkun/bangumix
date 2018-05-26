@@ -126,6 +126,19 @@ delimiter //
     end; //
 delimiter ;
 
+drop trigger if exists insert_bangumix_anime_point;
+delimiter //
+    create trigger insert_bangumix_anime_point
+    before
+    insert on bangumix_anime_point
+    for each row begin
+        if new.point > 5 or new.point < 1
+        then
+             CALL `'Cannot add or update row: point such be an integer in [1, 5]'`;
+        end if;
+    end; //
+delimiter ;
+
 
 -- 123456 : e10adc3949ba59abbe56e057f20f883e
 
