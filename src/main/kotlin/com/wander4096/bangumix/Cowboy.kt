@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
+import java.security.MessageDigest
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
@@ -72,7 +73,7 @@ class Cowboy @Autowired constructor(
               redirect: RedirectAttributes,
               session: HttpSession): String {
         if (userService.checkUsername(username) != null) {
-            if (userService.checkUsernameAndPassword(username, password) != null) {
+            if (userService.checkUsernameAndPassword(username, password.md5()) != null) {
                 session.setAttribute("user", username)
 //                redirect.addFlashAttribute("loginSuccess", true)
                 return "redirect:/"
@@ -107,7 +108,7 @@ class Cowboy @Autowired constructor(
             return "redirect:/register"
         } else {
             try {
-                userService.registerUser(User(username, password))
+                userService.registerUser(User(username, password.md5()))
             } catch (e: IllegalArgumentException) {
                 redirect.addFlashAttribute("errorMessage", e.message)
                 return "redirect:/register"
@@ -188,5 +189,13 @@ class Cowboy @Autowired constructor(
             redirect.addFlashAttribute("errorMessage", "未知错误")
         }
         return "redirect:/anime"
+    }
+
+    fun String.md5(): String {
+        val md = MessageDigest.getInstance("MD5")
+        val digested = md.digest(toByteArray())
+        return digested.joinToString("") {
+            String.format("%02x", it)
+        }
     }
 }
