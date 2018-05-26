@@ -11,6 +11,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
@@ -132,30 +133,29 @@ class Cowboy @Autowired constructor(
     fun addTag(@RequestParam animeName: String,
                @RequestParam animeTag: String,
                redirect: RedirectAttributes,
-               session: HttpSession,
-               request: HttpServletRequest): String {
+               session: HttpSession): String {
+        redirect.addAttribute("animeName", animeName)
         try {
             tagService.insertOne(animeName, session.getAttribute("user") as String, animeTag)
         } catch (e: IllegalArgumentException) {
             redirect.addFlashAttribute("errorMessage", e.message)
         }
-        return "redirect:" + request.getHeader("Referer")
+        return "redirect:/anime"
     }
 
     @PostMapping("/remove/tag")
+    @ResponseBody
     fun removeTag(@RequestParam animeName: String,
                   @RequestParam animeTag: String,
                   redirect: RedirectAttributes,
-                  session: HttpSession,
-                  request: HttpServletRequest): String {
+                  session: HttpSession): String {
+        redirect.addAttribute("animeName", animeName)
         try {
             tagService.removeOne(animeName, session.getAttribute("user") as String, animeTag)
-        } catch (e: IllegalArgumentException) {
-            redirect.addFlashAttribute("errorMessage", e.message)
         } catch (e: Exception) {
             redirect.addFlashAttribute("errorMessage", "未知错误！")
         }
-        return "redirect:" + request.getHeader("Referer")
+        return "OK"
     }
 
     @PostMapping("/add/comment")

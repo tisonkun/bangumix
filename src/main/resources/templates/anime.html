@@ -33,7 +33,6 @@
             var tn = e.previousElementSibling.innerHTML;
             var an = encodeURIComponent(document.getElementById("animename").innerText);
             $.post("remove/tag/", "animeName=" + an + "&animeTag=" + tn);
-            console.log(an, tn);
             $(e).parent().remove();
         }
     </script>
