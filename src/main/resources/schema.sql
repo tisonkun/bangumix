@@ -124,7 +124,7 @@ delimiter //
                              from bangumix_anime)) as s
                     group by s.anime_name
                     order by prec
-                    limit 5) as t;
+                    limit 3) as t;
 
     end; //
 delimiter ;

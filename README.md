@@ -12,8 +12,8 @@
 2. 下载代码后解压, 修改 resources 目录下的 application.properties 文件
 以匹配本地的数据库信息
 
-3. 在同一目录下使用 schema.sql 文件导入数据库表模式和样例数据, 保持数据库
-连接打开
+3. 在同一目录下使用 schema.sql 文件导入数据库表模式, 使用 data.sql 导入样例
+数据,保持数据库连接打开
 
 4. 在工程根目录 bangumix/ 下运行 `mvn clean spring-boot:run` 运行程序
 
