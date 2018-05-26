@@ -101,19 +101,22 @@ create view bangumix_anime_full_info as
 drop procedure if exists bangumix_recommend;
 delimiter //
     create procedure bangumix_recommend(
-        username varchar (255)
+        in_username varchar (255)
     )
     begin
         select anime_name
         from (select s.anime_name, min(s.tag) as prec
               from (select anime_name, tag
-                    from (select distinct anime_name, 0 as tag
+                    from (select distinct username, anime_name, 0 as tag
                           from
                             (bangumix_anime_tag as a)
                             natural join
                             (select distinct tag_content
                             from bangumix_anime_tag as b
-                            where b.username = username) as x) as y
+                            where b.username = in_username) as x) as y
+                    where not exists (select *
+                                      from bangumix_anime_tag as z
+                                      where z.username = in_username and z.anime_name = y.anime_name)
 
                             union
 

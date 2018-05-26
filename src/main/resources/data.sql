@@ -1,8 +1,8 @@
-TRUNCATE TABLE bangumix_user;
-TRUNCATE TABLE bangumix_anime;
-TRUNCATE TABLE bangumix_anime_comment;
-TRUNCATE TABLE bangumix_anime_point;
-TRUNCATE TABLE bangumix_anime_tag;
+delete from bangumix_anime_comment;
+delete from bangumix_anime_point;
+delete from bangumix_anime_tag;
+delete from bangumix_user;
+delete from bangumix_anime;
 
 -- 123456 : e10adc3949ba59abbe56e057f20f883e
 
@@ -41,7 +41,6 @@ insert into bangumix_anime (anime_name, director_name, synopsis) values ('Brown'
 insert into bangumix_anime (anime_name, director_name, synopsis) values ('Smith', 'Fishergrave', 'Near it in the field, I remember, were three faint points of light, three telescopic stars infinitely remote, and all around it was the unfathomable darkness of empty space.');
 insert into bangumix_anime (anime_name, director_name, synopsis) values ('Miller', 'Ribdew', 'One dog rolled before him, well-nigh slashed in half; but a second had him by the thigh, a third gripped his collar be- hind, and a fourth had the blade of the sword between its teeth, tasting its own blood.');
 insert into bangumix_anime (anime_name, director_name, synopsis) values ('Robinson', 'Glazerrelic', 'The secular cooling that must someday overtake our planet has already gone far indeed with our neighbour.');
-insert into bangumix_anime (anime_name, director_name, synopsis) values ('Miller', 'Swordlegend', 'The Nellie, a cruising yawl, swung to her anchor without a flutter of the sails, and was at rest.');
 insert into bangumix_anime (anime_name, director_name, synopsis) values ('Harris', 'Arrowmint', 'The Nellie, a cruising yawl, swung to her anchor without a flutter of the sails, and was at rest.');
 insert into bangumix_anime_comment (anime_name, username, comment_content, comment_timestamp) values ('Brown', 'Arrowmint', 'The Nellie, a cruising yawl, swung to her anchor without a flutter of the sails, and was at rest.', null);
 insert into bangumix_anime_comment (anime_name, username, comment_content, comment_timestamp) values ('Miller', 'Fishergrave', 'The secular cooling that must someday overtake our planet has already gone far indeed with our neighbour.', null);
@@ -77,19 +76,13 @@ insert into bangumix_anime_point (anime_name, username, point) values ('Miller',
 insert into bangumix_anime_point (anime_name, username, point) values ('Martinez', 'Terrierplump', 2);
 insert into bangumix_anime_point (anime_name, username, point) values ('Brown', 'Fishergrave', 4);
 insert into bangumix_anime_point (anime_name, username, point) values ('Miller', 'Leopardquasar', 1);
-insert into bangumix_anime_point (anime_name, username, point) values ('Brown', 'Craftertime', 4);
-insert into bangumix_anime_point (anime_name, username, point) values ('Brown', 'Fishergrave', 2);
 insert into bangumix_anime_point (anime_name, username, point) values ('Miller', 'Arrowmint', 3);
-insert into bangumix_anime_point (anime_name, username, point) values ('Miller', 'Fishergrave', 1);
 insert into bangumix_anime_point (anime_name, username, point) values ('Brown', 'Ribdew', 4);
 insert into bangumix_anime_point (anime_name, username, point) values ('Thompson', 'Craftertime', 4);
 insert into bangumix_anime_point (anime_name, username, point) values ('Robinson', 'Piratecurly', 4);
 insert into bangumix_anime_point (anime_name, username, point) values ('White', 'Arrowmint', 4);
 insert into bangumix_anime_point (anime_name, username, point) values ('White', 'Leopardquasar', 1);
-insert into bangumix_anime_point (anime_name, username, point) values ('Miller', 'Leopardquasar', 3);
 insert into bangumix_anime_point (anime_name, username, point) values ('Smith', 'Ribdew', 4);
-insert into bangumix_anime_point (anime_name, username, point) values ('White', 'Arrowmint', 3);
-insert into bangumix_anime_point (anime_name, username, point) values ('Brown', 'Ribdew', 2);
 insert into bangumix_anime_point (anime_name, username, point) values ('Wilson', 'Piratecurly', 2);
 insert into bangumix_anime_point (anime_name, username, point) values ('Martinez', 'Ribdew', 2);
 insert into bangumix_anime_point (anime_name, username, point) values ('White', 'Craftertime', 2);
@@ -98,11 +91,8 @@ insert into bangumix_anime_point (anime_name, username, point) values ('White', 
 insert into bangumix_anime_point (anime_name, username, point) values ('Martinez', 'Glazerrelic', 2);
 insert into bangumix_anime_point (anime_name, username, point) values ('Thompson', 'Crystaltorch', 1);
 insert into bangumix_anime_point (anime_name, username, point) values ('Wilson', 'Terrierplump', 1);
-insert into bangumix_anime_point (anime_name, username, point) values ('Brown', 'Leopardquasar', 4);
-insert into bangumix_anime_point (anime_name, username, point) values ('Brown', 'Ribdew', 2);
 insert into bangumix_anime_point (anime_name, username, point) values ('Thompson', 'Terrierplump', 2);
 insert into bangumix_anime_point (anime_name, username, point) values ('Wilson', 'Ribdew', 2);
-insert into bangumix_anime_point (anime_name, username, point) values ('Thompson', 'Craftertime', 4);
 insert into bangumix_anime_tag (anime_name, username, tag_content) values ('Brown', 'Glazerrelic', 'Bolivia');
 insert into bangumix_anime_tag (anime_name, username, tag_content) values ('Robinson', 'Swordlegend', 'Germany');
 insert into bangumix_anime_tag (anime_name, username, tag_content) values ('Robinson', 'Fishergrave', 'Bolivia');
